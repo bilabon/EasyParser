@@ -1,0 +1,8 @@
+*\.pyc
+*.pyc
+*.db
+.env/
+*~
+.DS_Store
+*.sqlite
+*.html
