@@ -4,7 +4,7 @@
   - save a source page to a file
   - save some blocks of a source page to a database
 
-**To run you shoud:**
+**To run you should:**
 ```
 git clone https://github.com/bilabon/EasyParser.git
 cd EasyParser/
