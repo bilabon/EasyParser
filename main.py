@@ -2,6 +2,7 @@
 import urllib
 import sqlite3
 from lxml.html import fromstring, tostring
+from grab import Grab
 
 
 class EasyParser(object):
@@ -31,8 +32,8 @@ class EasyParser(object):
         """Saving some list of blocks to a database
         Args:
             block_list, example:
-            [<table class='pline'><tr><td>text</td></tr></table>,
-             <table class='pline'><tr><td>text</td></tr></table>]
+            [<div class='serp-item_plain_yes'>text</div>,
+             <div class='serp-item_plain_yes'>text</div>]
             db_name: database name
         """
         conn = sqlite3.connect(db_name)
@@ -50,8 +51,10 @@ class EasyParser(object):
 
     def get_source_page(self, url):
         """Getting a source page by given URL"""
-        page = urllib.urlopen(url)
-        return page.read()
+        grab = Grab()
+        grab.go(url)
+        grab.go(url)
+        return grab.response.body
 
     def get_block_list(self, source_page):
         """Getting some html blocks from given source page
@@ -59,15 +62,13 @@ class EasyParser(object):
             source_page: string parameter with a source page
         Returns:
             block_list, example:
-            [<table class='pline'><tr><td>text</td></tr></table>,
-             <table class='pline'><tr><td>text</td></tr></table>]
+            [<div class='serp-item_plain_yes'>text</div>,
+             <div class='serp-item_plain_yes'>text</div>]
         """
         block_list = []
         tree = fromstring(source_page)
-        for elem in tree.xpath(u"//table[@class='pline']"):
-            # checking if elem is right block
-            if "2" not in elem.values():
-                block_list.append(tostring(elem, pretty_print=True))
+        for elem in tree.xpath(u"//div[contains(@class,'serp-item_plain_yes')]"):
+            block_list.append(tostring(elem, pretty_print=True))
         return block_list
 
     def build_search_url(self, search_text):
@@ -75,7 +76,7 @@ class EasyParser(object):
         Args:
             search_text: string search paraperet
         """
-        url = u"https://nnm-club.me/?q=%s" % (search_text)
+        url = u'http://yandex.ua/search/?text=%s' % search_text
         return url
 
     def run_parser(self):
@@ -90,8 +91,9 @@ class EasyParser(object):
         self.save_to_bd(block_list, self.db_name)
         return len(block_list)
 
+
 if __name__ == "__main__":
     """Usage example"""
-    parser = EasyParser(search_text=u"Machina")
+    parser = EasyParser(search_text=u"test")
     blocks_count = parser.run_parser()
     print "%s blocks completed" % blocks_count
