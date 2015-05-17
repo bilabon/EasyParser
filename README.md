@@ -2,7 +2,7 @@
 
 **Simple parser which can:**
   - save a source page to a file
-  - some blocks of a source page to a database
+  - save some blocks of a source page to a database
 
 **To run you shoud:**
 ```
