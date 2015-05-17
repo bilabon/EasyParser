@@ -12,6 +12,12 @@ class EasyParser(object):
                  search_text="text",
                  file_name="file.html",
                  db_name="easy_parser.sqlite"):
+        """
+        Args:
+            search_text: string parameter for searching at a web page
+            file_name: a filename for saving a source page
+            db_name: a filename for a database
+        """
         self.search_text = search_text
         self.file_name = file_name
         self.db_name = db_name
