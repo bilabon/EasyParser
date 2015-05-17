@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import urllib
 import sqlite3
@@ -76,8 +75,6 @@ class EasyParser(object):
         url = self.build_search_url(self.search_text)
         source_page = self.get_source_page(url)
         block_list = self.get_block_list(source_page)
-        # import pdb
-        # pdb.set_trace()
         self.save_to_file(self.file_name, source_page)
         self.save_to_bd(block_list)
         return len(block_list)
