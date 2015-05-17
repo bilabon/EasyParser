@@ -6,7 +6,7 @@ from lxml.html import fromstring, tostring
 
 class EasyParser(object):
     """Parser which can save a source page to a file and some blocks of
-    a source page to a database by specified URL's search parameter
+    the source page to a database by specified URL's search parameter
     """
     def __init__(self, search_text='text', file_name='file.html'):
         self.search_text = search_text
@@ -21,8 +21,8 @@ class EasyParser(object):
         """Saving some list of blocks to the database
         Args:
             block_list, example:
-            [<table><tr><td>text</td></tr></table>,
-             <table><tr><td>text</td></tr></table>]
+            [<table class='pline'><tr><td>text</td></tr></table>,
+             <table class='pline'><tr><td>text</td></tr></table>]
         """
         conn = sqlite3.connect("easy_parser.sqlite")
         c = conn.cursor()
@@ -48,8 +48,8 @@ class EasyParser(object):
             source_page: string parameter with a source page
         Returns:
             block_list, example:
-            [<table><tr><td>text</td></tr></table>,
-             <table><tr><td>text</td></tr></table>]
+            [<table class='pline'><tr><td>text</td></tr></table>,
+             <table class='pline'><tr><td>text</td></tr></table>]
         """
         block_list = []
         tree = fromstring(source_page)
@@ -70,7 +70,7 @@ class EasyParser(object):
     def run_parser(self):
         """Here we run the parser.
         Returns:
-            count of blocks whick parcer has just saved
+            count of blocks which the parcer has just saved
         """
         url = self.build_search_url(self.search_text)
         source_page = self.get_source_page(url)
