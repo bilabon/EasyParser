@@ -8,23 +8,28 @@ class EasyParser(object):
     """Parser which can save a source page to a file and some blocks of
     the source page to a database by specified URL's search parameter
     """
-    def __init__(self, search_text='text', file_name='file.html'):
+    def __init__(self,
+                 search_text="text",
+                 file_name="file.html",
+                 db_name="easy_parser.sqlite"):
         self.search_text = search_text
         self.file_name = file_name
+        self.db_name = db_name
 
     def save_to_file(self, file_name, source):
         """Saving a string to a file"""
         with open(file_name, "w") as file_:
             file_.write(str(source))
 
-    def save_to_bd(self, block_list):
-        """Saving some list of blocks to the database
+    def save_to_bd(self, block_list, db_name):
+        """Saving some list of blocks to a database
         Args:
             block_list, example:
             [<table class='pline'><tr><td>text</td></tr></table>,
              <table class='pline'><tr><td>text</td></tr></table>]
+            db_name: database name
         """
-        conn = sqlite3.connect("easy_parser.sqlite")
+        conn = sqlite3.connect(db_name)
         c = conn.cursor()
         sql = '''CREATE TABLE IF NOT EXISTS block
         (
@@ -76,10 +81,10 @@ class EasyParser(object):
         source_page = self.get_source_page(url)
         block_list = self.get_block_list(source_page)
         self.save_to_file(self.file_name, source_page)
-        self.save_to_bd(block_list)
+        self.save_to_bd(block_list, self.db_name)
         return len(block_list)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     """Usage example"""
     parser = EasyParser(search_text=u"Machina")
     blocks_count = parser.run_parser()
