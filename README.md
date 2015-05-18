@@ -1,8 +1,9 @@
 # EasyParser
 
 **Simple parser which can:**
-  - save a source page to a file
-  - save some blocks of a source page to a database
+  - parse first source page from Yandex search results page
+  - save the source page to a file
+  - save blocks with results from the source page to a database
 
 **To run you should:**
 ```
