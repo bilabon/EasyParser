@@ -10,9 +10,9 @@ class EasyParser(object):
     the source page to a database by specified URL's search parameter
     """
     def __init__(self,
-                 search_text="text",
-                 file_name="file.html",
-                 db_name="easy_parser.sqlite"):
+                 search_text=u"text",
+                 file_name=u"file.html",
+                 db_name=u"easy_parser.sqlite"):
         """
         Args:
             search_text: string parameter for searching at a web page
@@ -49,11 +49,12 @@ class EasyParser(object):
         conn.commit()
         conn.close()
 
-    def get_source_page(self, url):
-        """Getting a source page by given URL"""
+    def get_source_page(self, search_text):
+        """Getting a source page by given search parameter"""
         grab = Grab()
-        grab.go(url)
-        grab.go(url)
+        grab.go(u"https://ya.ru/")
+        grab.doc.set_input(u"text", search_text)
+        grab.doc.submit()
         return grab.response.body
 
     def get_block_list(self, source_page):
@@ -71,21 +72,12 @@ class EasyParser(object):
             block_list.append(tostring(elem, pretty_print=True))
         return block_list
 
-    def build_search_url(self, search_text):
-        """Building a URL with given search parameter
-        Args:
-            search_text: string search paraperet
-        """
-        url = u'http://yandex.ua/search/?text=%s' % search_text
-        return url
-
     def run_parser(self):
         """Here we run the parser.
         Returns:
             count of blocks which the parcer has just saved
         """
-        url = self.build_search_url(self.search_text)
-        source_page = self.get_source_page(url)
+        source_page = self.get_source_page(self.search_text)
         block_list = self.get_block_list(source_page)
         self.save_to_file(self.file_name, source_page)
         self.save_to_bd(block_list, self.db_name)
@@ -96,4 +88,4 @@ if __name__ == "__main__":
     """Usage example"""
     parser = EasyParser(search_text=u"test")
     blocks_count = parser.run_parser()
-    print "%s blocks completed" % blocks_count
+    print u"%s blocks completed" % blocks_count
