@@ -45,7 +45,7 @@ class EasyParser(object):
         );'''
         c.execute(sql)
         for block in block_list:
-            c.execute("insert into block (data) values (?)", (block, ))
+            c.execute("INSERT INTO block (data) VALUES (?)", (block, ))
         conn.commit()
         conn.close()
 
